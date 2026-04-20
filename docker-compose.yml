@@ -1,6 +1,6 @@
 services:
   faceswap-api:
-    image: ghcr.io/dvvtech/faceswap:latest
+    image: ghcr.io/dvvtech/faceswap-api:latest
     deploy:
       replicas: 1
       restart_policy:
