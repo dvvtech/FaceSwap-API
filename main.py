@@ -14,7 +14,7 @@ app = FastAPI()
 face_app = FaceAnalysis(name='buffalo_l')
 face_app.prepare(ctx_id=-1)
 
-swapper = get_model('inswapper_128.onnx')
+swapper = get_model('inswapper_128.onnx', providers=['CPUExecutionProvider'])
 
 TEMP_DIR = "temp"
 os.makedirs(TEMP_DIR, exist_ok=True)
