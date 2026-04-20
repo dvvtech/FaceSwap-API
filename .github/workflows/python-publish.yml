@@ -1,0 +1,62 @@
+name: Deploy Python API to VM
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - uses: actions/checkout@v4.2.2
+      
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3.4.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile   # ← теперь обычный Python Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository }}:latest
+
+      - name: Copy docker-compose.yml to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/dvvtech/deploy/faceswap/"
+      
+      - name: Deploy to VM via SSH (Swarm mode)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          script: |
+            cd /home/dvvtech/deploy/faceswap
+            
+            echo "Pull latest image"
+            docker pull ghcr.io/${{ github.repository }}:latest
+
+            echo "Deploy stack"
+            docker stack deploy -c docker-compose.yml faceswap-stack
+            
+            sleep 5
+            
+            echo "Cleanup"
+            docker image prune -f
+            
+            echo "Services:"
+            docker service ls
