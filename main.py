@@ -10,7 +10,7 @@ import uuid
 
 app = FastAPI()
 
-# init models (грузим один раз)123
+# init models (грузим один раз)777
 face_app = FaceAnalysis(name='buffalo_l')
 face_app.prepare(ctx_id=-1)
 
