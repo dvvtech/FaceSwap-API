@@ -23,3 +23,5 @@ Total 4 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
 To https://github.com/dvvtech/FaceSwap-API.git
    388d06a..d6c1ecc  main -> main
 PS C:\DVV\Github2026\FaceSwap-API>
+
+https://api.cloud-platform.pro/faceswap

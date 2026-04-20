@@ -10,7 +10,7 @@ services:
         - "traefik.http.routers.faceswap-api.rule=Host(`api.cloud-platform.pro`) && PathPrefix(`/faceswap`)"
         - "traefik.http.routers.faceswap-api.entrypoints=websecure"
         - "traefik.http.routers.faceswap-api.tls.certresolver=letsencrypt"
-        - "traefik.http.services.faceswap-api.loadbalancer.server.port=8080"
+        - "traefik.http.services.faceswap-api.loadbalancer.server.port=8000"
         - "traefik.http.middlewares.faceswap-api-stripprefix.stripprefix.prefixes=/faceswap"
         - "traefik.http.routers.faceswap-api.middlewares=faceswap-api-stripprefix"
     networks:
